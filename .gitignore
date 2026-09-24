@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Data
+*.pkl
+*.h5
+*.pt
+*.pth
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# AI assistant tools
+.cursor/
+.cursorrules
+.claude/
+.aider*
+.continue/
+.github/copilot/
+copilot-instructions.md
+*.ai.log
+*.prompt.md
+chat_history/
