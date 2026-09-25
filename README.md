@@ -1,30 +1,34 @@
 # Statistical Modeling and Neural Networks
 
 A computational study connecting classical statistical modeling with modern
-neural network architectures, motivated by research directions in OIST's
-Machine Learning and Data Science Unit (MLDS) and related computational units.
+neural network architectures.
 
-## Motivation
+## Overview
 
-This project explores two complementary research themes:
+This project explores two complementary themes in machine learning:
 
-1. **Statistical modeling for high-dimensional time series** — directly relevant to
-   MLDS Unit research on kernel methods, statistical modeling, and optimal transport.
-2. **Neural network architectures for structured data** — connecting to MLDS work on
-   graph neural networks (GNN) and deep learning models.
+1. **Statistical modeling for time series** — feature engineering, model
+   comparison, and the mathematical foundations behind linear regression.
+2. **Neural network architectures for image classification** — implementing
+   a CNN from scratch and analyzing its behavior on handwritten digits.
 
 ## Modules
 
 ### 1. Time Series Forecasting with Statistical Learning
-- Lag feature engineering and supervised learning formulation
-- Linear Regression and Random Forest Regressor comparison
-- **Mathematical foundations**: closed-form solution via matrix operations,
-  eigenvalue decomposition of autocovariance matrices
+
+- Lag feature engineering to formulate forecasting as supervised learning
+- Comparison of Linear Regression and Random Forest Regressor
+- **Results**: Linear Regression achieves MAE 17.19 / RMSE 20.76, outperforming
+  Random Forest (MAE 28.99 / RMSE 38.17) due to the latter's inability to
+  extrapolate beyond the training range.
 
 ### 2. Handwritten Digit Recognition with Neural Networks
-- CNN implementation from scratch in PyTorch
-- Complete training pipeline with validation monitoring
-- Error analysis and misclassification visualization
+
+- SimpleCNN implemented from scratch in PyTorch (2 conv + 2 FC layers)
+- Trained for 5 epochs on 60,000 MNIST samples
+- **Results**: 99.17% test accuracy (83 errors out of 10,000)
+- Confusion analysis reveals that misclassifications align with known
+  handwritten-digit ambiguities (7↔2, 9↔7, 4↔9)
 
 ## Mathematical Foundations
 
@@ -40,9 +44,18 @@ The time series module demonstrates the underlying linear algebra explicitly:
   **96% of total variance** (PC1 alone: 85.4%), revealing that the series
   is dominated by a long-term trend plus annual seasonality.
 
-Results are reproducible via `notebooks/03_math_foundations.ipynb`.
+## Repository Structure
+   statistical-modeling-and-neural-networks/
+   ├── 01_time_series_forecasting/
+   │ ├── notebooks/ # EDA, modeling, mathematical foundations
+   │ ├── src/ # Data loading, feature engineering, models
+   │ └── results/ # Figures and metric JSONs
+   └── 02_mnist_pytorch/
+   ├── notebooks/ # Training and error analysis
+   ├── src/ # CNN model, training loop, evaluation
+   └── results/ # Figures, model weights, metrics
 
-## Setup
+ ## Setup
 
 ```bash
 pip install -r requirements.txt
