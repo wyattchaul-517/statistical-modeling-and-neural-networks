@@ -26,6 +26,22 @@ This project explores two complementary research themes:
 - Complete training pipeline with validation monitoring
 - Error analysis and misclassification visualization
 
+## Mathematical Foundations
+
+The time series module demonstrates the underlying linear algebra explicitly:
+
+- **Closed-form OLS**: The normal equation $\hat{\beta} = (X^T X)^{-1} X^T y$
+  is implemented in NumPy and verified against scikit-learn
+  (maximum absolute difference: $4.88 \times 10^{-12}$).
+- **Autocovariance eigendecomposition**: The autocovariance matrix of the
+  lagged series is decomposed as $\Sigma = Q \Lambda Q^T$, confirming
+  symmetry and positive semi-definiteness.
+- **Low-dimensional structure**: The top 3 principal components explain
+  **96% of total variance** (PC1 alone: 85.4%), revealing that the series
+  is dominated by a long-term trend plus annual seasonality.
+
+Results are reproducible via `notebooks/03_math_foundations.ipynb`.
+
 ## Setup
 
 ```bash
