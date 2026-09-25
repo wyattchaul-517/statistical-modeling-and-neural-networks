@@ -22,15 +22,3 @@ env/
 # OS
 .DS_Store
 Thumbs.db
-
-# AI assistant tools
-.cursor/
-.cursorrules
-.claude/
-.aider*
-.continue/
-.github/copilot/
-copilot-instructions.md
-*.ai.log
-*.prompt.md
-chat_history/
