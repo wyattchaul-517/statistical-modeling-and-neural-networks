@@ -1,0 +1,68 @@
+{
+  "test_accuracy": 0.9917,
+  "total_misclassified": 83,
+  "per_class_accuracy": {
+    "0": 0.9928571428571429,
+    "1": 0.9955947136563876,
+    "2": 0.9961240310077519,
+    "3": 0.9891089108910891,
+    "4": 0.9938900203665988,
+    "5": 0.9899103139013453,
+    "6": 0.9937369519832986,
+    "7": 0.9902723735408561,
+    "8": 0.9876796714579056,
+    "9": 0.9871159563924677
+  },
+  "top_confused_pairs": [
+    {
+      "true": 7,
+      "predicted": 2,
+      "count": 6
+    },
+    {
+      "true": 9,
+      "predicted": 7,
+      "count": 6
+    },
+    {
+      "true": 3,
+      "predicted": 2,
+      "count": 5
+    },
+    {
+      "true": 4,
+      "predicted": 9,
+      "count": 5
+    },
+    {
+      "true": 8,
+      "predicted": 2,
+      "count": 5
+    },
+    {
+      "true": 2,
+      "predicted": 7,
+      "count": 4
+    },
+    {
+      "true": 5,
+      "predicted": 6,
+      "count": 4
+    },
+    {
+      "true": 3,
+      "predicted": 5,
+      "count": 3
+    },
+    {
+      "true": 5,
+      "predicted": 3,
+      "count": 3
+    },
+    {
+      "true": 9,
+      "predicted": 5,
+      "count": 3
+    }
+  ]
+}
