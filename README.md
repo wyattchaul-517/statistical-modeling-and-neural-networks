@@ -26,16 +26,10 @@ This project explores two complementary research themes:
 - Complete training pipeline with validation monitoring
 - Error analysis and misclassification visualization
 
-## Relevance to OIST Research
-
-| Project Component | OIST Research Connection |
-|:---|:---|
-| Time series statistical modeling | MLDS Unit: high-dimensional statistical modeling, kernel methods |
-| Matrix operations & eigenvalue decomposition | MLDS Unit: geometric machine learning, optimal transport |
-| CNN implementation in PyTorch | MLDS Unit: deep learning models, GNN |
-| Feature engineering pipeline | Biological Nonlinear Dynamics Data Science Unit (Prof. Gerald Pao): time-series analysis |
-
 ## Setup
 
 ```bash
 pip install -r requirements.txt
+
+Author
+Lei Zhou — BSc Software Engineering, University of Gothenburg
