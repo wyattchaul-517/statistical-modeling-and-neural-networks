@@ -22,3 +22,6 @@ env/
 # OS
 .DS_Store
 Thumbs.db
+
+# Dataset files
+02_mnist_pytorch/data/
