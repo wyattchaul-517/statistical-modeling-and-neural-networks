@@ -4,52 +4,48 @@ A computational study connecting classical statistical modeling with modern neur
 
 ## Overview
 
-This project explores two complementary themes in machine learning:
+This project explores two themes in machine learning:
 
 1. **Statistical modeling for time series**  
    Feature engineering, model comparison, and the mathematical foundations of linear regression.
 
 2. **Neural network architectures for image classification**  
-   Implementing and analyzing a convolutional neural network for handwritten digit recognition.
+   A convolutional neural network trained on handwritten digits.
 
-The project emphasizes understanding methods from first principles rather than treating machine learning models as black boxes. This includes closed-form ordinary least squares, eigendecomposition, and explicit implementation of a CNN training pipeline.
+The goal is to implement methods from first principles rather than treat them as black boxes. That includes the closed-form OLS solution, eigendecomposition, and a CNN training pipeline written from scratch.
 
-The project also explores how these empirical results connect to broader questions about model complexity, generalization, and information-theoretic analysis.
-
----
+The project also includes a small information-theoretic analysis of the time-series models. It is exploratory, and the scope limitation is discussed in that section.
 
 ## Modules
 
-### 1. Time Series Forecasting with Statistical Learning
+### 1. Time Series Forecasting
 
-The first module uses the **AirPassengers** dataset to study time-series forecasting as a supervised learning problem.
+The first module uses the AirPassengers dataset to study forecasting as a supervised learning problem.
 
-#### Methods
+Methods:
 
 - Lag feature engineering
 - Linear Regression
 - Random Forest Regression
-- Closed-form Ordinary Least Squares (OLS)
+- Closed-form Ordinary Least Squares
 - Covariance matrix eigendecomposition
-- Principal Component Analysis (PCA)
-- Model evaluation using MAE and RMSE
+- Principal component analysis via eigendecomposition
+- Evaluation using MAE and RMSE
 
-#### Results
+Results:
 
 | Model | MAE | RMSE |
 |---|---:|---:|
 | Linear Regression | 17.19 | 20.76 |
 | Random Forest | 28.99 | 38.17 |
 
-Linear Regression performs better on this forecasting task. The difference is consistent with the fact that tree-based models have limited ability to extrapolate beyond the range represented in their training data.
+Linear Regression does better on this task. A decision tree produces a piecewise-constant function, so it cannot return values outside the range of targets it saw during training. The test period extends beyond that range, and the Random Forest underpredicts. Linear Regression fits a linear combination of lag features and can extend past the training range.
 
----
+### 2. Handwritten Digit Recognition
 
-### 2. Handwritten Digit Recognition with PyTorch
+The second module implements a CNN for MNIST classification.
 
-The second module implements a convolutional neural network for handwritten digit classification using **MNIST**.
-
-#### Architecture
+Architecture:
 
 - 2 convolutional layers
 - 2 fully connected layers
@@ -58,17 +54,15 @@ The second module implements a convolutional neural network for handwritten digi
 - Cross-entropy loss
 - Mini-batch gradient descent
 
-The model was trained for 5 epochs on 60,000 MNIST training samples.
+Trained for 5 epochs on 60,000 samples.
 
-#### Results
+Results:
 
-**Test accuracy: 99.17%**
+Test accuracy: 99.17%
+Misclassified: 83 out of 10,000
+Per-class accuracy: about 98.7% to 99.6%
 
-- Test samples: 10,000
-- Misclassified samples: 83
-- Per-class accuracy: approximately 98.7%–99.6%
-
-The error analysis shows that the most common mistakes occur between visually similar digits, including:
+The most common mistakes happen between visually similar digits:
 
 - 7 → 2
 - 9 → 7
@@ -76,65 +70,54 @@ The error analysis shows that the most common mistakes occur between visually si
 - 4 → 9
 - 8 → 2
 
----
-
 ## Mathematical Foundations
 
-A central goal of this project is to make the mathematical structure behind the models explicit.
+A central goal is to make the math behind the models explicit.
 
-### Closed-form Ordinary Least Squares
+### Closed-form OLS
 
-The linear regression model is also implemented using the normal equation:
+Linear regression is also implemented with the normal equation:
 
-$$
-\hat{\beta} = (X^T X)^{-1}X^T y
-$$
+$$\hat{\beta} = (X^T X)^{-1} X^T y$$
 
-The NumPy implementation is compared against `scikit-learn`.
+The NumPy implementation is compared against scikit-learn. The maximum absolute difference is:
 
-The maximum absolute difference between the two implementations is:
+$$4.88 \times 10^{-12}$$
 
-$$
-4.88 \times 10^{-12}
-$$
-
-This provides a numerical verification of the closed-form implementation.
-
----
+This verifies the manual implementation numerically.
 
 ### Covariance Matrix and Eigendecomposition
 
-The covariance structure of the lagged time-series features is analyzed through eigendecomposition:
+The covariance structure of the lagged features is analyzed through eigendecomposition:
 
-$$
-\Sigma = Q \Lambda Q^T
-$$
+$$\Sigma = Q \Lambda Q^T$$
 
-The analysis verifies the expected symmetry and positive semi-definite structure of the covariance matrix.
+The matrix is symmetric and positive semi-definite, as expected. The first three principal components cover about 96% of the total variance, with PC1 alone covering about 85.4%. The lagged representation has substantial low-dimensional structure.
 
-The first three principal components explain approximately **96% of the total variance**, with the first principal component alone explaining approximately **85.4%**.
+## Information-Theoretic Exploratory Analysis
 
-This indicates that the lagged representation contains substantial low-dimensional structure.
+The project includes a small analysis using discrete Sibson α-mutual information between targets and model predictions, written as $I_\alpha(Y; \hat{Y})$.
 
----
+A note on what this quantity is. In formal information-theoretic generalization bounds, the object of interest is $I(S; A(S))$, the mutual information between the training set and the learned model. That is not what gets computed here. What gets computed is how strongly the predictions depend on the target under a chosen discretization. The experiment is exploratory and does not try to validate any generalization bound.
 
-## Information-Theoretic Perspective
+The analysis covers four things:
 
-The project also explores an information-theoretic perspective on machine learning generalization.
+- Baseline α-MI comparison between Linear Regression and Random Forest predictions
+- Bin sensitivity with 4, 6, 8, and 10 quantile bins
+- Ridge regularization with α from 0.001 to 100 on standardized features
+- Random Forest depth from 2 up to unrestricted
 
-The current implementation does **not** attempt to establish a formal information-theoretic generalization bound. Instead, the repository provides a foundation for future experiments involving quantities such as:
+Observations:
 
-- Mutual information
-- Sibson α-mutual information
-- Maximal leakage
-- Generalization gaps
-- Model complexity and regularization
+At every bin count, RF predictions carry more α-MI about the target than LR predictions. The ordering is stable, so comparing the two models at a fixed bin count is meaningful even though the absolute values depend on the bin count.
 
-These quantities are particularly interesting because they provide alternative ways of studying the relationship between the information contained in a learned model and its ability to generalize.
+The Ridge sweep produces a U-shaped generalization gap with a minimum near α = 1.0, but α-MI barely moves along the sweep. Regularization strength inside a fixed model class does not seem to shift this diagnostic much.
 
-The current dataset and experimental design impose important limitations, discussed below.
+For Random Forest depth, α-MI and the gap do not move together. From depth 2 to depth 5, α-MI climbs from 1.12 to 1.64 while the gap drops from 3756 to 1375. From depth 5 to depth 10, α-MI plateaus and the gap ticks up slightly.
 
----
+The α-MI diagnostic separates model classes but does not track overfitting within a single class. Given the small dataset (120 training, 12 test) and the non-i.i.d. structure of the series, all estimates here are exploratory.
+
+Results and tables are in `02_modeling.ipynb`.
 
 ## Repository Structure
 
@@ -165,50 +148,23 @@ statistical-modeling-and-neural-networks/
 └── README.md
 ```
 
+
 ## Limitations and Future Work
 
 ### Sample Size
 
-The time-series analysis uses 120 training observations.
-
-While this is sufficient for the current model comparison, it is relatively small for reliable estimation of information-theoretic quantities, particularly when continuous variables are discretized into bins.
-
-A natural extension would be to use larger datasets and investigate the stability of information-theoretic estimates under different discretization strategies.
-
----
+The time-series analysis uses 120 training observations. This is enough for model comparison but small for reliable estimation of information-theoretic quantities, especially when continuous variables get discretized into bins. A larger dataset would allow a more stable estimate across different bin counts.
 
 ### Non-Stationarity
 
-The AirPassengers series contains strong trend and annual seasonality.
-
-Many classical information-theoretic generalization results are formulated under independent and identically distributed (i.i.d.) assumptions. The temporal dependence and non-stationarity of this dataset therefore make a direct application of such bounds inappropriate without additional assumptions.
-
-Future work could investigate information-theoretic generalization in non-i.i.d. settings, including settings with temporal dependence or Markov structure.
-
----
+The AirPassengers series has a strong trend and yearly seasonality. Information-theoretic generalization bounds are usually stated for i.i.d. samples. The temporal dependence here means the bounds do not apply directly without extra assumptions. Extending the analysis to non-i.i.d. settings would be a natural next step.
 
 ### Model Scope
 
-The current project focuses on:
-
-- Linear Regression
-- Random Forest Regression
-- A small convolutional neural network
-
-Future extensions could investigate additional model classes, such as:
-
-- Ridge Regression
-- Kernel methods
-- Gaussian Processes
-- Deeper neural networks
-- Graph Neural Networks
-
-A larger experimental setup would also make it possible to study how model complexity, regularization, and information-theoretic quantities interact across different architectures.
-
----
+The current project covers Linear Regression, Random Forest Regression, and a small CNN. Adding kernel methods, Gaussian Processes, deeper networks, or graph neural networks would let us study how model complexity, regularization, and information-theoretic quantities interact across a wider range of models.
 
 ## Author
 
-**Lei Zhou**  
+Lei Zhou  
 BSc Software Engineering  
 University of Gothenburg
