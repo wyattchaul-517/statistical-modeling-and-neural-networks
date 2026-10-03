@@ -138,7 +138,7 @@ The current dataset and experimental design impose important limitations, discus
 
 ## Repository Structure
 
-```text
+```
 statistical-modeling-and-neural-networks/
 │
 ├── 01_time_series_forecasting/
@@ -163,6 +163,7 @@ statistical-modeling-and-neural-networks/
 │
 ├── requirements.txt
 └── README.md
+```
 
 ## Limitations and Future Work
 
