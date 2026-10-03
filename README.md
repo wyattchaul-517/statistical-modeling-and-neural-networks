@@ -1,94 +1,213 @@
 # Statistical Modeling and Neural Networks
 
-A computational study connecting classical statistical modeling with modern
-neural network architectures.
+A computational study connecting classical statistical modeling with modern neural network architectures.
 
 ## Overview
 
 This project explores two complementary themes in machine learning:
 
-1. **Statistical modeling for time series** — feature engineering, model
-   comparison, and the mathematical foundations behind linear regression.
-2. **Neural network architectures for image classification** — implementing
-   a CNN from scratch and analyzing its behavior on handwritten digits.
-   
-  The project emphasizes implementing methods from first principles (closed-form
-  OLS, eigendecomposition, CNN from scratch) rather than treating them as black
-  boxes. This mathematical foundation motivates an information-theoretic view
-  of generalization (This is discussed in the Limitations section below).
+1. **Statistical modeling for time series**  
+   Feature engineering, model comparison, and the mathematical foundations of linear regression.
+
+2. **Neural network architectures for image classification**  
+   Implementing and analyzing a convolutional neural network for handwritten digit recognition.
+
+The project emphasizes understanding methods from first principles rather than treating machine learning models as black boxes. This includes closed-form ordinary least squares, eigendecomposition, and explicit implementation of a CNN training pipeline.
+
+The project also explores how these empirical results connect to broader questions about model complexity, generalization, and information-theoretic analysis.
+
+---
 
 ## Modules
 
 ### 1. Time Series Forecasting with Statistical Learning
 
-- Lag feature engineering to formulate forecasting as supervised learning
-- Comparison of Linear Regression and Random Forest Regressor
-- **Results**: Linear Regression achieves MAE 17.19 / RMSE 20.76, outperforming
-  Random Forest (MAE 28.99 / RMSE 38.17) due to the latter's inability to
-  extrapolate beyond the training range.
+The first module uses the **AirPassengers** dataset to study time-series forecasting as a supervised learning problem.
 
-### 2. Handwritten Digit Recognition with Neural Networks
+#### Methods
 
-- SimpleCNN implemented from scratch in PyTorch (2 conv + 2 FC layers)
-- Trained for 5 epochs on 60,000 MNIST samples
-- **Results**: 99.17% test accuracy (83 errors out of 10,000)
-- Confusion analysis reveals that misclassifications align with known
-  handwritten-digit ambiguities (7↔2, 9↔7, 4↔9)
+- Lag feature engineering
+- Linear Regression
+- Random Forest Regression
+- Closed-form Ordinary Least Squares (OLS)
+- Covariance matrix eigendecomposition
+- Principal Component Analysis (PCA)
+- Model evaluation using MAE and RMSE
+
+#### Results
+
+| Model | MAE | RMSE |
+|---|---:|---:|
+| Linear Regression | 17.19 | 20.76 |
+| Random Forest | 28.99 | 38.17 |
+
+Linear Regression performs better on this forecasting task. The difference is consistent with the fact that tree-based models have limited ability to extrapolate beyond the range represented in their training data.
+
+---
+
+### 2. Handwritten Digit Recognition with PyTorch
+
+The second module implements a convolutional neural network for handwritten digit classification using **MNIST**.
+
+#### Architecture
+
+- 2 convolutional layers
+- 2 fully connected layers
+- Dropout
+- ReLU activations
+- Cross-entropy loss
+- Mini-batch gradient descent
+
+The model was trained for 5 epochs on 60,000 MNIST training samples.
+
+#### Results
+
+**Test accuracy: 99.17%**
+
+- Test samples: 10,000
+- Misclassified samples: 83
+- Per-class accuracy: approximately 98.7%–99.6%
+
+The error analysis shows that the most common mistakes occur between visually similar digits, including:
+
+- 7 → 2
+- 9 → 7
+- 3 → 2
+- 4 → 9
+- 8 → 2
+
+---
 
 ## Mathematical Foundations
 
-The time series module demonstrates the underlying linear algebra explicitly:
+A central goal of this project is to make the mathematical structure behind the models explicit.
 
-- **Closed-form OLS**: The normal equation $\hat{\beta} = (X^T X)^{-1} X^T y$
-  is implemented in NumPy and verified against scikit-learn
-  (maximum absolute difference: $4.88 \times 10^{-12}$).
-- **Autocovariance eigendecomposition**: The autocovariance matrix of the
-  lagged series is decomposed as $\Sigma = Q \Lambda Q^T$, confirming
-  symmetry and positive semi-definiteness.
-- **Low-dimensional structure**: The top 3 principal components explain
-  **96% of total variance** (PC1 alone: 85.4%), revealing that the series
-  is dominated by a long-term trend plus annual seasonality.
+### Closed-form Ordinary Least Squares
+
+The linear regression model is also implemented using the normal equation:
+
+$$
+\hat{\beta} = (X^T X)^{-1}X^T y
+$$
+
+The NumPy implementation is compared against `scikit-learn`.
+
+The maximum absolute difference between the two implementations is:
+
+$$
+4.88 \times 10^{-12}
+$$
+
+This provides a numerical verification of the closed-form implementation.
+
+---
+
+### Covariance Matrix and Eigendecomposition
+
+The covariance structure of the lagged time-series features is analyzed through eigendecomposition:
+
+$$
+\Sigma = Q \Lambda Q^T
+$$
+
+The analysis verifies the expected symmetry and positive semi-definite structure of the covariance matrix.
+
+The first three principal components explain approximately **96% of the total variance**, with the first principal component alone explaining approximately **85.4%**.
+
+This indicates that the lagged representation contains substantial low-dimensional structure.
+
+---
+
+## Information-Theoretic Perspective
+
+The project also explores an information-theoretic perspective on machine learning generalization.
+
+The current implementation does **not** attempt to establish a formal information-theoretic generalization bound. Instead, the repository provides a foundation for future experiments involving quantities such as:
+
+- Mutual information
+- Sibson α-mutual information
+- Maximal leakage
+- Generalization gaps
+- Model complexity and regularization
+
+These quantities are particularly interesting because they provide alternative ways of studying the relationship between the information contained in a learned model and its ability to generalize.
+
+The current dataset and experimental design impose important limitations, discussed below.
+
+---
 
 ## Repository Structure
-   statistical-modeling-and-neural-networks/
-   ├── 01_time_series_forecasting/
-   │ ├── notebooks/ # EDA, modeling, mathematical foundations
-   │ ├── src/ # Data loading, feature engineering, models
-   │ └── results/ # Figures and metric JSONs
-   └── 02_mnist_pytorch/
-   ├── notebooks/ # Training and error analysis
-   ├── src/ # CNN model, training loop, evaluation
-   └── results/ # Figures, model weights, metrics
 
- ## Setup
-
-```bash
-pip install -r requirements.txt
+```text
+statistical-modeling-and-neural-networks/
+│
+├── 01_time_series_forecasting/
+│   ├── notebooks/
+│   │   └── EDA, modeling, and mathematical analysis
+│   │
+│   ├── src/
+│   │   └── Data loading, feature engineering, and models
+│   │
+│   └── results/
+│       └── Figures and metric JSON files
+│
+├── 02_mnist_pytorch/
+│   ├── notebooks/
+│   │   └── Training and error analysis
+│   │
+│   ├── src/
+│   │   └── CNN model, training loop, and evaluation
+│   │
+│   └── results/
+│       └── Figures, model weights, and metrics
+│
+├── requirements.txt
+└── README.md
 
 ## Limitations and Future Work
 
-**Sample size.** The time-series analysis uses 120 training observations
-(monthly data from 1950 to 1959). While sufficient for model comparison,
-this sample size is too small for reliable estimation of information-theoretic
-quantities such as Sibson α-mutual information or Maximal Leakage, which
-require joint distributions over discretized spaces. A natural extension
-with larger datasets would be to estimate such measures and compare them
-to empirical generalization gaps.
+### Sample Size
 
-**Non-stationarity.** The AirPassengers series exhibits a strong trend and
-annual seasonality. The generalization bounds from information theory
-typically assume i.i.d. samples, which does not hold here. Extending the
-analysis to non-i.i.d. settings  would be a meaningful direction (for example via the concentration
-inequalities developed for Markov chains).
+The time-series analysis uses 120 training observations.
 
-**Model scope.** The current project focuses on two classical models
-(linear regression and random forest) for the time-series task, and a
-small CNN for image classification. Expanding to more expressive
-architectures (kernel methods, Gaussian processes, or graph neural networks)
-and analyzing their information-theoretic generalization behavior would
-require substantially more data.
+While this is sufficient for the current model comparison, it is relatively small for reliable estimation of information-theoretic quantities, particularly when continuous variables are discretized into bins.
 
+A natural extension would be to use larger datasets and investigate the stability of information-theoretic estimates under different discretization strategies.
+
+---
+
+### Non-Stationarity
+
+The AirPassengers series contains strong trend and annual seasonality.
+
+Many classical information-theoretic generalization results are formulated under independent and identically distributed (i.i.d.) assumptions. The temporal dependence and non-stationarity of this dataset therefore make a direct application of such bounds inappropriate without additional assumptions.
+
+Future work could investigate information-theoretic generalization in non-i.i.d. settings, including settings with temporal dependence or Markov structure.
+
+---
+
+### Model Scope
+
+The current project focuses on:
+
+- Linear Regression
+- Random Forest Regression
+- A small convolutional neural network
+
+Future extensions could investigate additional model classes, such as:
+
+- Ridge Regression
+- Kernel methods
+- Gaussian Processes
+- Deeper neural networks
+- Graph Neural Networks
+
+A larger experimental setup would also make it possible to study how model complexity, regularization, and information-theoretic quantities interact across different architectures.
+
+---
 
 ## Author
 
-Lei Zhou — BSc Software Engineering, University of Gothenburg
+**Lei Zhou**  
+BSc Software Engineering  
+University of Gothenburg
