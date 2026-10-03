@@ -11,6 +11,11 @@ This project explores two complementary themes in machine learning:
    comparison, and the mathematical foundations behind linear regression.
 2. **Neural network architectures for image classification** — implementing
    a CNN from scratch and analyzing its behavior on handwritten digits.
+   
+  The project emphasizes implementing methods from first principles (closed-form
+  OLS, eigendecomposition, CNN from scratch) rather than treating them as black
+  boxes. This mathematical foundation motivates an information-theoretic view
+  of generalization (This is discussed in the Limitations section below).
 
 ## Modules
 
@@ -60,5 +65,30 @@ The time series module demonstrates the underlying linear algebra explicitly:
 ```bash
 pip install -r requirements.txt
 
-Author
+## Limitations and Future Work
+
+**Sample size.** The time-series analysis uses 120 training observations
+(monthly data from 1950 to 1959). While sufficient for model comparison,
+this sample size is too small for reliable estimation of information-theoretic
+quantities such as Sibson α-mutual information or Maximal Leakage, which
+require joint distributions over discretized spaces. A natural extension
+with larger datasets would be to estimate such measures and compare them
+to empirical generalization gaps.
+
+**Non-stationarity.** The AirPassengers series exhibits a strong trend and
+annual seasonality. The generalization bounds from information theory
+typically assume i.i.d. samples, which does not hold here. Extending the
+analysis to non-i.i.d. settings  would be a meaningful direction (for example via the concentration
+inequalities developed for Markov chains).
+
+**Model scope.** The current project focuses on two classical models
+(linear regression and random forest) for the time-series task, and a
+small CNN for image classification. Expanding to more expressive
+architectures (kernel methods, Gaussian processes, or graph neural networks)
+and analyzing their information-theoretic generalization behavior would
+require substantially more data.
+
+
+## Author
+
 Lei Zhou — BSc Software Engineering, University of Gothenburg
